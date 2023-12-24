@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 
 from distribution_zoo import (
     get_random_animal_emoji,
@@ -49,6 +50,7 @@ inject_custom_css()
 
 if st.sidebar.button(':house: Home'):
     st.experimental_set_query_params()
+    time.sleep(0.05)
     st.rerun()
 st.sidebar.title(f'Distribution Zoo  {zoo_animal}')
 
@@ -105,6 +107,7 @@ else:
                     dist_class='cont_uni',
                     dist_name=dist.__name__,
                 )
+                time.sleep(0.05)
                 st.rerun()
 
     with col2:
