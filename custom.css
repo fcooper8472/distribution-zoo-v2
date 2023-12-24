@@ -1,0 +1,4 @@
+/* Targeting the tab button with a specific attribute and its inner <p> tag */
+button[data-baseweb='tab'] p {
+    font-size: 20pt;
+}
