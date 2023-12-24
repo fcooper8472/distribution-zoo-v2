@@ -35,7 +35,7 @@ class BaseDistribution:
         st.divider()
 
     def title(self):
-        raise NotImplementedError(f'Title not implemented in subclass {self.name} ({self.file_path})')
+        st.header(f'{self.display_name} distribution')
 
     def sliders(self):
         raise NotImplementedError(f'Sliders not implemented in subclass {self.name} ({self.file_path})')
@@ -57,33 +57,49 @@ class BaseDistribution:
         formulae, latex, code, tips = st.tabs(tab_titles)
 
         with formulae:
-            with open(self.data_dir / 'formulae.md', 'r') as f:
-                st.markdown(f.read())
+            formulae_file = self.data_dir / 'formulae.md'
+            if formulae_file.exists():
+                with open(formulae_file, 'r') as f:
+                    st.markdown(f.read())
+            else:
+                st.write('No formulae yet...')
 
         with latex:
-            with open(self.data_dir / 'latex.md', 'r') as f:
-                st.markdown(f.read())
+            latex_file = self.data_dir / 'latex.md'
+            if latex_file.exists():
+                with open(self.data_dir / 'latex.md', 'r') as f:
+                    st.markdown(f.read())
+            else:
+                st.write('No LaTeX yet...')
 
         with code:
 
-            st.info('Code snippets are dynamically updated with the parameters', icon="ℹ️")
-
             all_code_files = list((self.data_dir / 'code').glob('*'))
 
-            lang_names = [language_display_name(lang) for lang in all_code_files]
+            if len(all_code_files) > 0:
 
-            lang_tabs = st.tabs(lang_names)
+                st.info('Code snippets are dynamically updated with the parameters', icon="ℹ️")
 
-            for lang_tab, code_file in zip(lang_tabs, all_code_files):
-                with open(code_file, 'r') as f:
-                    markdown_text = f.read()
-                    for old, new in self.code_substitutions:
-                        markdown_text = markdown_text.replace(old, new)
-                    lang_tab.markdown(markdown_text)
+                lang_names = [language_display_name(lang) for lang in all_code_files]
+
+                lang_tabs = st.tabs(lang_names)
+
+                for lang_tab, code_file in zip(lang_tabs, all_code_files):
+                    with open(code_file, 'r') as f:
+                        markdown_text = f.read()
+                        for old, new in self.code_substitutions:
+                            markdown_text = markdown_text.replace(old, new)
+                        lang_tab.markdown(markdown_text)
+            else:
+                st.write('No code yet...')
 
         with tips:
-            with open(self.data_dir / 'tips.md', 'r') as f:
-                st.markdown(f.read())
+            tips_file = self.data_dir / 'tips.md'
+            if tips_file.exists():
+                with open(tips_file, 'r') as f:
+                    st.markdown(f.read())
+            else:
+                st.write('No tips yet...')
 
     def update_code_substitutions(self):
         raise NotImplementedError(f'Code substitutions not implemented in subclass {self.name} ({self.file_path})')
