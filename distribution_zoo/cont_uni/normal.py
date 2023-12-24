@@ -1,5 +1,4 @@
 from distribution_zoo import BaseDistribution
-from distribution_zoo import language_display_name
 
 import altair as alt
 import numpy as np
@@ -75,48 +74,6 @@ class Normal(BaseDistribution):
         with cdf_col:
             st.subheader('Cumulative distribution function')
             st.altair_chart(cdf_chart, use_container_width=True)
-
-    def info(self):
-
-        self.update_code_substitutions()
-
-        tab_titles = [
-            'Formulae',
-            r'$\LaTeX$',
-            'Code',
-            'Practical tips',
-        ]
-
-        formulae, latex, code, tips = st.tabs(tab_titles)
-
-        with formulae:
-            with open(self.data_dir / 'formulae.md', 'r') as f:
-                st.markdown(f.read())
-
-        with latex:
-            with open(self.data_dir / 'latex.md', 'r') as f:
-                st.markdown(f.read())
-
-        with code:
-
-            st.info('Code snippets are dynamically updated with the parameters', icon="ℹ️")
-
-            all_code_files = list((self.data_dir / 'code').glob('*'))
-
-            lang_names = [language_display_name(lang) for lang in all_code_files]
-
-            lang_tabs = st.tabs(lang_names)
-
-            for lang_tab, code_file in zip(lang_tabs, all_code_files):
-                with open(code_file, 'r') as f:
-                    markdown_text = f.read()
-                    for old, new in self.code_substitutions:
-                        markdown_text = markdown_text.replace(old, new)
-                    lang_tab.markdown(markdown_text)
-
-        with tips:
-            with open(self.data_dir / 'tips.md', 'r') as f:
-                st.markdown(f.read())
 
     def update_code_substitutions(self):
         self.code_substitutions = [
