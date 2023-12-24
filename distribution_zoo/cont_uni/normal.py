@@ -20,9 +20,6 @@ class Normal(BaseDistribution):
     def __init__(self):
         super().__init__()
 
-    def title(self):
-        st.header(f'{self.display_name} distribution')
-
     def sliders(self):
 
         self.param_range_start, self.param_range_end = st.sidebar.slider(
