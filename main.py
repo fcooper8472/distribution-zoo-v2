@@ -3,7 +3,9 @@ import time
 
 from distribution_zoo import (
     get_random_animal_emoji,
-    inject_custom_css
+    inject_custom_css,
+    get_indices_from_query_params,
+    DistributionClass
 )
 
 # All distributions should be imported here
@@ -12,17 +14,16 @@ from distribution_zoo.cont_uni import (
     Gamma,
 )
 
-# All imported distributions need to be in one of these lists
-distributions_cont_uni = [
-    Normal,
-    Gamma,
-]
-
-distributions_disc_uni = [
-]
-
-distributions_mult = [
-]
+dist_mapping = {
+    DistributionClass('Continuous Univariate', 'cont_uni'): [
+        Normal,
+        Gamma,
+    ],
+    DistributionClass('Discrete Univariate', 'disc_uni'): [
+    ],
+    DistributionClass('Multivariate', 'mult'): [
+    ],
+}
 
 zoo_animal = get_random_animal_emoji()
 
@@ -38,15 +39,7 @@ st.set_page_config(
     }
 )
 
-query_params = st.experimental_get_query_params()
-
-selected_class_index = None
-if 'dist_class' in query_params:
-    selected_class_index = 0
-
-selected_dist_index = None
-if 'dist_name' in query_params:
-    selected_dist_index = 0
+selected_class_index, selected_dist_index = get_indices_from_query_params(dist_mapping)
 
 inject_custom_css()
 
@@ -58,15 +51,10 @@ st.sidebar.title(f'Distribution Zoo  {zoo_animal}')
 
 st.sidebar.header('Distribution class:')
 
-distribution_classes = [
-    'Continuous Univariate',
-    'Discrete Univariate',
-    'Multivariate',
-]
-
 selected_class = st.sidebar.selectbox(
     label='Select a distribution class',
-    options=distribution_classes,
+    options=dist_mapping.keys(),
+    format_func=lambda _dist_class: _dist_class.display_name,
     index=selected_class_index,
     placeholder='Select a distribution class',
     label_visibility='collapsed'
@@ -74,19 +62,15 @@ selected_class = st.sidebar.selectbox(
 
 st.sidebar.header('Distribution:')
 
-if selected_class == 'Continuous Univariate':
-    distributions = distributions_cont_uni
-elif selected_class == 'Discrete Univariate':
-    distributions = distributions_disc_uni
-elif selected_class == 'Multivariate':
-    distributions = distributions_mult
+if selected_class:
+    available_dists = dist_mapping[selected_class]
 else:
-    distributions = []
+    available_dists = []
 
 selected_dist = st.sidebar.selectbox(
     label='Select a distribution',
-    options=distributions,
-    format_func=lambda dist: dist.display_name,
+    options=available_dists,
+    format_func=lambda _dist: _dist.display_name,
     index=selected_dist_index,
     placeholder='Select a distribution',
     label_visibility='collapsed'
@@ -99,25 +83,16 @@ else:
 
     st.title('Explore the Distribution Zoo')
 
-    col1, col2, col3 = st.columns(3)
+    cols = st.columns(len(dist_mapping.keys()))
 
-    with col1:
-        st.subheader('Continuous Univariate:')
-        for dist in distributions_cont_uni:
+    for col, key in zip(cols, dist_mapping.keys()):
+        col.subheader(key.display_name)
+
+        for dist in dist_mapping[key]:
             if st.button(dist.display_name):
                 st.experimental_set_query_params(
-                    dist_class='cont_uni',
-                    dist_name=dist.__name__,
+                    dist_class=key.short_name,
+                    dist_name=dist.get_class_name(),
                 )
                 time.sleep(0.05)
                 st.rerun()
-
-    with col2:
-        st.subheader('Discrete Univariate:')
-        for dist in distributions_disc_uni:
-            st.subheader(dist.display_name)
-
-    with col3:
-        st.subheader('Multivariate:')
-        for dist in distributions_mult:
-            st.subheader(dist.display_name)

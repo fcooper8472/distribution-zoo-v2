@@ -31,3 +31,36 @@ def inject_custom_css():
 
 def language_display_name(language_file: pathlib.Path) -> str:
     return language_file.stem.capitalize()
+
+
+def get_indices_from_query_params(dist_mapping: dict):
+
+    qp = st.experimental_get_query_params()
+
+    if 'dist_class' not in qp:
+        return None, None
+
+    qp_class_list = qp['dist_class']
+    if len(qp_class_list) != 1:
+        return None, None
+    qp_class = qp_class_list[0]
+
+    try:
+        class_index = [_class.short_name for _class in dist_mapping.keys()].index(qp_class)
+    except ValueError:
+        return None, None
+
+    if 'dist_name' not in qp:
+        return class_index, None
+
+    qp_dist_list = qp['dist_name']
+    if len(qp_dist_list) != 1:
+        return class_index, None
+    qp_dist = qp_dist_list[0]
+
+    try:
+        dist_index = [_dist.get_class_name() for _dist in list(dist_mapping.values())[class_index]].index(qp_dist)
+    except ValueError:
+        return class_index, None
+
+    return class_index, dist_index
