@@ -1,5 +1,4 @@
 from distribution_zoo import BaseDistribution
-from distribution_zoo import language_display_name
 
 import altair as alt
 import numpy as np
@@ -20,9 +19,6 @@ class Normal(BaseDistribution):
 
     def __init__(self):
         super().__init__()
-
-    def title(self):
-        st.header(f'{self.display_name} distribution')
 
     def sliders(self):
 
@@ -76,37 +72,10 @@ class Normal(BaseDistribution):
             st.subheader('Cumulative distribution function')
             st.altair_chart(cdf_chart, use_container_width=True)
 
-    def info(self):
-
-        tab_titles = [
-            'Formulae',
-            r'$\LaTeX$',
-            'Code',
-            'Practical tips',
+    def update_code_substitutions(self):
+        self.code_substitutions = [
+            (r'{{{mean}}}', str(self.param_mean)),
+            (r'{{{std}}}', str(self.param_std)),
+            (r'{{{range_start}}}', str(self.param_range_start)),
+            (r'{{{range_end}}}', str(self.param_range_end)),
         ]
-
-        formulae, latex, code, tips = st.tabs(tab_titles)
-
-        with formulae:
-            with open(self.data_dir / 'formulae.md', 'r') as f:
-                st.markdown(f.read())
-
-        with latex:
-            with open(self.data_dir / 'latex.md', 'r') as f:
-                st.markdown(f.read())
-
-        with code:
-            all_code_files = list((self.data_dir / 'code').glob('*'))
-
-            lang_names = [language_display_name(lang) for lang in all_code_files]
-
-            lang_tabs = st.tabs(lang_names)
-
-            for lang_tab, code_file in zip(lang_tabs, all_code_files):
-                with open(code_file, 'r') as f:
-                    markdown_text = f.read().replace(r'{{{mean}}}', str(self.param_mean)).replace(r'{{{std}}}', str(self.param_std))
-                    lang_tab.markdown(markdown_text)
-
-        with tips:
-            with open(self.data_dir / 'tips.md', 'r') as f:
-                st.markdown(f.read())

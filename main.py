@@ -8,12 +8,14 @@ from distribution_zoo import (
 
 # All distributions should be imported here
 from distribution_zoo.cont_uni import (
-    Normal
+    Normal,
+    Gamma,
 )
 
 # All imported distributions need to be in one of these lists
 distributions_cont_uni = [
-    Normal
+    Normal,
+    Gamma,
 ]
 
 distributions_disc_uni = [

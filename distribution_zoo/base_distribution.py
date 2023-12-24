@@ -1,3 +1,5 @@
+from .utils import language_display_name
+
 from inflection import underscore
 from pathlib import Path
 
@@ -9,7 +11,9 @@ import sys
 
 class BaseDistribution:
 
-    display_name = "Base distribution"
+    display_name: str = "Base distribution"
+
+    code_substitutions: list[tuple[str, str]] = []
 
     def __init__(self):
         self.name = self.__class__.__name__
@@ -31,7 +35,7 @@ class BaseDistribution:
         st.divider()
 
     def title(self):
-        raise NotImplementedError(f'Title not implemented in subclass {self.name} ({self.file_path})')
+        st.header(f'{self.display_name} distribution')
 
     def sliders(self):
         raise NotImplementedError(f'Sliders not implemented in subclass {self.name} ({self.file_path})')
@@ -40,4 +44,62 @@ class BaseDistribution:
         raise NotImplementedError(f'Plot not implemented in subclass {self.name} ({self.file_path})')
 
     def info(self):
-        raise NotImplementedError(f'Info not implemented in subclass {self.name} ({self.file_path})')
+
+        self.update_code_substitutions()
+
+        tab_titles = [
+            'Formulae',
+            r'$\LaTeX$',
+            'Code',
+            'Practical tips',
+        ]
+
+        formulae, latex, code, tips = st.tabs(tab_titles)
+
+        with formulae:
+            formulae_file = self.data_dir / 'formulae.md'
+            if formulae_file.exists():
+                with open(formulae_file, 'r') as f:
+                    st.markdown(f.read())
+            else:
+                st.write('No formulae yet...')
+
+        with latex:
+            latex_file = self.data_dir / 'latex.md'
+            if latex_file.exists():
+                with open(self.data_dir / 'latex.md', 'r') as f:
+                    st.markdown(f.read())
+            else:
+                st.write('No LaTeX yet...')
+
+        with code:
+
+            all_code_files = list((self.data_dir / 'code').glob('*'))
+
+            if len(all_code_files) > 0:
+
+                st.info('Code snippets are dynamically updated with the parameters', icon="ℹ️")
+
+                lang_names = [language_display_name(lang) for lang in all_code_files]
+
+                lang_tabs = st.tabs(lang_names)
+
+                for lang_tab, code_file in zip(lang_tabs, all_code_files):
+                    with open(code_file, 'r') as f:
+                        markdown_text = f.read()
+                        for old, new in self.code_substitutions:
+                            markdown_text = markdown_text.replace(old, new)
+                        lang_tab.markdown(markdown_text)
+            else:
+                st.write('No code yet...')
+
+        with tips:
+            tips_file = self.data_dir / 'tips.md'
+            if tips_file.exists():
+                with open(tips_file, 'r') as f:
+                    st.markdown(f.read())
+            else:
+                st.write('No tips yet...')
+
+    def update_code_substitutions(self):
+        raise NotImplementedError(f'Code substitutions not implemented in subclass {self.name} ({self.file_path})')
