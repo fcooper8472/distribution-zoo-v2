@@ -39,8 +39,7 @@ st.set_page_config(
     }
 )
 
-# selected_class_index, selected_dist_index = get_indices_from_query_params(distribution_classes, distributions_cont_uni, distributions_disc_uni, distributions_mult)
-selected_class_index, selected_dist_index = None, None
+selected_class_index, selected_dist_index = get_indices_from_query_params(dist_mapping)
 
 inject_custom_css()
 
