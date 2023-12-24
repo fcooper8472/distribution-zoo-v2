@@ -78,6 +78,8 @@ class Normal(BaseDistribution):
 
     def info(self):
 
+        self.update_code_substitutions()
+
         tab_titles = [
             'Formulae',
             r'$\LaTeX$',
@@ -96,6 +98,9 @@ class Normal(BaseDistribution):
                 st.markdown(f.read())
 
         with code:
+
+            st.info('Code snippets are dynamically updated with the parameters', icon="ℹ️")
+
             all_code_files = list((self.data_dir / 'code').glob('*'))
 
             lang_names = [language_display_name(lang) for lang in all_code_files]
@@ -104,9 +109,19 @@ class Normal(BaseDistribution):
 
             for lang_tab, code_file in zip(lang_tabs, all_code_files):
                 with open(code_file, 'r') as f:
-                    markdown_text = f.read().replace(r'{{{mean}}}', str(self.param_mean)).replace(r'{{{std}}}', str(self.param_std))
+                    markdown_text = f.read()
+                    for old, new in self.code_substitutions:
+                        markdown_text = markdown_text.replace(old, new)
                     lang_tab.markdown(markdown_text)
 
         with tips:
             with open(self.data_dir / 'tips.md', 'r') as f:
                 st.markdown(f.read())
+
+    def update_code_substitutions(self):
+        self.code_substitutions = [
+            (r'{{{mean}}}', str(self.param_mean)),
+            (r'{{{std}}}', str(self.param_std)),
+            (r'{{{range_start}}}', str(self.param_range_start)),
+            (r'{{{range_end}}}', str(self.param_range_end)),
+        ]

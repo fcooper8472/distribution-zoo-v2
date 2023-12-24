@@ -9,7 +9,9 @@ import sys
 
 class BaseDistribution:
 
-    display_name = "Base distribution"
+    display_name: str = "Base distribution"
+
+    code_substitutions: list[tuple[str, str]] = []
 
     def __init__(self):
         self.name = self.__class__.__name__
@@ -41,3 +43,6 @@ class BaseDistribution:
 
     def info(self):
         raise NotImplementedError(f'Info not implemented in subclass {self.name} ({self.file_path})')
+
+    def update_code_substitutions(self):
+        raise NotImplementedError(f'Code substitutions not implemented in subclass {self.name} ({self.file_path})')
