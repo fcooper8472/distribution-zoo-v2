@@ -16,19 +16,20 @@ class BaseDistribution:
     code_substitutions: list[tuple[str, str]] = []
 
     def __init__(self):
-        self.name = self.__class__.__name__
-
         # Get the module of the derived class
         module = sys.modules[self.__class__.__module__]
         # Get the file path of the module
         self.file_path = Path(inspect.getfile(module)).resolve()
-        self.data_dir = self.file_path.parent / underscore(self.name)
+        self.data_dir = self.file_path.parent / underscore(self.get_class_name())
+
+    @classmethod
+    def get_class_name(cls):
+        return cls.__name__
 
     def display(self):
         self.title()
         st.sidebar.header('Parameters:')
         self.sliders()
-
         self.plot()
         st.divider()
         self.info()
@@ -38,10 +39,10 @@ class BaseDistribution:
         st.header(f'{self.display_name} distribution')
 
     def sliders(self):
-        raise NotImplementedError(f'Sliders not implemented in subclass {self.name} ({self.file_path})')
+        raise NotImplementedError(f'Sliders not implemented in subclass {self.get_class_name()} ({self.file_path})')
 
     def plot(self):
-        raise NotImplementedError(f'Plot not implemented in subclass {self.name} ({self.file_path})')
+        raise NotImplementedError(f'Plot not implemented in subclass {self.get_class_name()} ({self.file_path})')
 
     def info(self):
 
@@ -102,4 +103,4 @@ class BaseDistribution:
                 st.write('No tips yet...')
 
     def update_code_substitutions(self):
-        raise NotImplementedError(f'Code substitutions not implemented in subclass {self.name} ({self.file_path})')
+        raise NotImplementedError(f'Code substitutions not implemented in subclass {self.get_class_name()} ({self.file_path})')
