@@ -3,7 +3,8 @@ import time
 
 from distribution_zoo import (
     get_random_animal_emoji,
-    inject_custom_css
+    inject_custom_css,
+    get_indices_from_query_params,
 )
 
 # All distributions should be imported here
@@ -24,6 +25,12 @@ distributions_disc_uni = [
 distributions_mult = [
 ]
 
+distribution_classes = [
+    'Continuous Univariate',
+    'Discrete Univariate',
+    'Multivariate',
+]
+
 zoo_animal = get_random_animal_emoji()
 
 st.set_page_config(
@@ -38,15 +45,7 @@ st.set_page_config(
     }
 )
 
-query_params = st.experimental_get_query_params()
-
-selected_class_index = None
-if 'dist_class' in query_params:
-    selected_class_index = 0
-
-selected_dist_index = None
-if 'dist_name' in query_params:
-    selected_dist_index = 0
+selected_class_index, selected_dist_index = get_indices_from_query_params(distribution_classes, distributions_cont_uni, distributions_disc_uni, distributions_mult)
 
 inject_custom_css()
 
@@ -57,12 +56,6 @@ if st.sidebar.button(':house: Home'):
 st.sidebar.title(f'Distribution Zoo  {zoo_animal}')
 
 st.sidebar.header('Distribution class:')
-
-distribution_classes = [
-    'Continuous Univariate',
-    'Discrete Univariate',
-    'Multivariate',
-]
 
 selected_class = st.sidebar.selectbox(
     label='Select a distribution class',
