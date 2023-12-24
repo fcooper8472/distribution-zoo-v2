@@ -96,20 +96,16 @@ class Normal(BaseDistribution):
                 st.markdown(f.read())
 
         with code:
-            all_code_files = (self.data_dir / 'code').glob('*')
+            all_code_files = list((self.data_dir / 'code').glob('*'))
 
-            selected_lang = st.selectbox(
-                label='',
-                options=all_code_files,
-                format_func=language_display_name,
-                index=None,
-                placeholder="Select a language"
-            )
+            lang_names = [language_display_name(lang) for lang in all_code_files]
 
-            if selected_lang:
-                with open(selected_lang, 'r') as f:
+            lang_tabs = st.tabs(lang_names)
+
+            for lang_tab, code_file in zip(lang_tabs, all_code_files):
+                with open(code_file, 'r') as f:
                     markdown_text = f.read().replace(r'{{{mean}}}', str(self.param_mean)).replace(r'{{{std}}}', str(self.param_std))
-                    st.markdown(markdown_text)
+                    lang_tab.markdown(markdown_text)
 
         with tips:
             with open(self.data_dir / 'tips.md', 'r') as f:
