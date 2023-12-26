@@ -1,3 +1,5 @@
+import json
+import requests
 import streamlit as st
 import time
 
@@ -96,3 +98,31 @@ else:
                 )
                 time.sleep(0.05)
                 st.rerun()
+
+    with open('homepage_authors.md', 'r') as f:
+        st.subheader('Authors:')
+        st.markdown(f.read())
+
+    response_1 = requests.get('https://fcooper8472.github.io/distribution-zoo-analytics/data_30.json')
+    response_2 = requests.get('https://fcooper8472.github.io/distribution-zoo-analytics/data_all_time.json')
+
+    if response_1.status_code == 200 and response_2.status_code == 200:
+
+        data_month = json.loads(response_1.text)
+        data_all_time = json.loads(response_2.text)
+
+        substitutions = [
+            (r'{{{month_users}}}', str(data_month['user_count'])),
+            (r'{{{month_sessions}}}', str(data_month['session_count'])),
+            (r'{{{month_countries}}}', str(data_month['country_count'])),
+            (r'{{{all_users}}}', str(data_all_time['user_count'])),
+            (r'{{{all_sessions}}}', str(data_all_time['session_count'])),
+            (r'{{{all_countries}}}', str(data_all_time['country_count'])),
+        ]
+
+        with open('homepage_analytics.md', 'r') as f:
+            st.subheader('Analytics:')
+            markdown_text = f.read()
+            for old, new in substitutions:
+                markdown_text = markdown_text.replace(old, new)
+            st.markdown(markdown_text)
