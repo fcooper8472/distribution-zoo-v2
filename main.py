@@ -2,12 +2,14 @@ import json
 import requests
 import streamlit as st
 import time
+from pathlib import Path
 
 from distribution_zoo import (
     get_random_animal_emoji,
     inject_custom_css,
     get_indices_from_query_params,
-    DistributionClass
+    DistributionClass,
+    read_file_and_substitute,
 )
 
 # All distributions should be imported here
@@ -99,9 +101,8 @@ else:
                 time.sleep(0.05)
                 st.rerun()
 
-    with open('homepage_authors.md', 'r') as f:
-        st.subheader('Authors:')
-        st.markdown(f.read())
+    st.subheader('Authors:')
+    st.markdown(read_file_and_substitute(Path('homepage_authors.md'), []))
 
     response_1 = requests.get('https://fcooper8472.github.io/distribution-zoo-analytics/data_30.json')
     response_2 = requests.get('https://fcooper8472.github.io/distribution-zoo-analytics/data_all_time.json')
@@ -120,9 +121,5 @@ else:
             (r'{{{all_countries}}}', str(data_all_time['country_count'])),
         ]
 
-        with open('homepage_analytics.md', 'r') as f:
-            st.subheader('Analytics:')
-            markdown_text = f.read()
-            for old, new in substitutions:
-                markdown_text = markdown_text.replace(old, new)
-            st.markdown(markdown_text)
+        st.subheader('Analytics:')
+        st.markdown(read_file_and_substitute(Path('homepage_analytics.md'), substitutions))

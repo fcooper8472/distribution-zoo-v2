@@ -1,4 +1,5 @@
 from .utils import language_display_name
+from .utils import read_file_and_substitute
 
 from inflection import underscore
 from pathlib import Path
@@ -86,11 +87,8 @@ class BaseDistribution:
                 lang_tabs = st.tabs(lang_names)
 
                 for lang_tab, code_file in zip(lang_tabs, all_code_files):
-                    with open(code_file, 'r') as f:
-                        markdown_text = f.read()
-                        for old, new in self.code_substitutions:
-                            markdown_text = markdown_text.replace(old, new)
-                        lang_tab.markdown(markdown_text)
+                    lang_tab.markdown(read_file_and_substitute(code_file, self.code_substitutions))
+
             else:
                 st.write('No code yet...')
 
