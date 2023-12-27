@@ -9,7 +9,7 @@ from distribution_zoo import (
     inject_custom_css,
     get_indices_from_query_params,
     DistributionClass,
-    read_file_and_substitute,
+    TextSubstitutions,
 )
 
 # All distributions should be imported here
@@ -102,7 +102,7 @@ else:
                 st.rerun()
 
     st.subheader('Authors:')
-    st.markdown(read_file_and_substitute(Path('homepage_authors.md'), []))
+    st.markdown(TextSubstitutions().apply_to_file(Path('homepage_authors.md')))
 
     response_1 = requests.get('https://fcooper8472.github.io/distribution-zoo-analytics/data_30.json')
     response_2 = requests.get('https://fcooper8472.github.io/distribution-zoo-analytics/data_all_time.json')
@@ -112,14 +112,13 @@ else:
         data_month = json.loads(response_1.text)
         data_all_time = json.loads(response_2.text)
 
-        substitutions = [
-            (r'{{{month_users}}}', str(data_month['user_count'])),
-            (r'{{{month_sessions}}}', str(data_month['session_count'])),
-            (r'{{{month_countries}}}', str(data_month['country_count'])),
-            (r'{{{all_users}}}', str(data_all_time['user_count'])),
-            (r'{{{all_sessions}}}', str(data_all_time['session_count'])),
-            (r'{{{all_countries}}}', str(data_all_time['country_count'])),
-        ]
+        substitutions = TextSubstitutions()
+        substitutions.add(r'{{{month_users}}}', str(data_month['user_count']))
+        substitutions.add(r'{{{month_sessions}}}', str(data_month['session_count']))
+        substitutions.add(r'{{{month_countries}}}', str(data_month['country_count']))
+        substitutions.add(r'{{{all_users}}}', str(data_all_time['user_count']))
+        substitutions.add(r'{{{all_sessions}}}', str(data_all_time['session_count']))
+        substitutions.add(r'{{{all_countries}}}', str(data_all_time['country_count']))
 
         st.subheader('Analytics:')
-        st.markdown(read_file_and_substitute(Path('homepage_analytics.md'), substitutions))
+        st.markdown(substitutions.apply_to_file(Path('homepage_analytics.md')))

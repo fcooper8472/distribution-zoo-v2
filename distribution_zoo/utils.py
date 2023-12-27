@@ -64,12 +64,3 @@ def get_indices_from_query_params(dist_mapping: dict):
         return class_index, None
 
     return class_index, dist_index
-
-
-def read_file_and_substitute(file_path: Path, subs: list[tuple[str, str]]) -> str:
-    assert file_path.is_file()
-    with open(file_path, 'r') as f:
-        content = f.read()
-        for old, new in subs:
-            content = content.replace(old, new)
-    return content

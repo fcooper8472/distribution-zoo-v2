@@ -73,9 +73,7 @@ class Normal(BaseDistribution):
             st.altair_chart(cdf_chart, use_container_width=True)
 
     def update_code_substitutions(self):
-        self.code_substitutions = [
-            (r'{{{mean}}}', str(self.param_mean)),
-            (r'{{{std}}}', str(self.param_std)),
-            (r'{{{range_start}}}', str(self.param_range_start)),
-            (r'{{{range_end}}}', str(self.param_range_end)),
-        ]
+        self.code_substitutions.add(r'{{{mean}}}', str(self.param_mean))
+        self.code_substitutions.add(r'{{{std}}}', str(self.param_std))
+        self.code_substitutions.add(r'{{{range_start}}}', str(self.param_range_start))
+        self.code_substitutions.add(r'{{{range_end}}}', str(self.param_range_end))

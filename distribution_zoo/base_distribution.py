@@ -1,5 +1,5 @@
 from .utils import language_display_name
-from .utils import read_file_and_substitute
+from .text_substitutions import TextSubstitutions
 
 from inflection import underscore
 from pathlib import Path
@@ -14,7 +14,7 @@ class BaseDistribution:
 
     display_name: str = "Base distribution"
 
-    code_substitutions: list[tuple[str, str]] = []
+    code_substitutions: TextSubstitutions = TextSubstitutions()
 
     def __init__(self):
         # Get the module of the derived class
@@ -87,7 +87,7 @@ class BaseDistribution:
                 lang_tabs = st.tabs(lang_names)
 
                 for lang_tab, code_file in zip(lang_tabs, all_code_files):
-                    lang_tab.markdown(read_file_and_substitute(code_file, self.code_substitutions))
+                    lang_tab.markdown(self.code_substitutions.apply_to_file(code_file))
 
             else:
                 st.write('No code yet...')
