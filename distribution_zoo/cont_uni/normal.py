@@ -23,7 +23,7 @@ class Normal(BaseDistribution):
     def sliders(self):
 
         self.param_range_start, self.param_range_end = st.sidebar.slider(
-            'Range', min_value=-50.0, max_value=50.0, value=(-10.0, 10.0), step=0.1
+            'Range', min_value=self.range_min, max_value=self.range_max, value=(-10.0, 10.0), step=0.1
         )
 
         self.param_mean = st.sidebar.slider(
