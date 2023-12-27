@@ -12,6 +12,7 @@ scipy = "^1.11.4"
 inflection = "^0.5.1"
 pandas = "^2.1.4"
 altair = "^5.2.0"
+requests = "^2.31.0"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^6.1.0"

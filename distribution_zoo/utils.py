@@ -1,4 +1,4 @@
-import pathlib
+from pathlib import Path
 import random
 import streamlit as st
 
@@ -20,7 +20,7 @@ def get_random_animal_emoji():
 
 
 def inject_custom_css():
-    css_file = pathlib.Path(__file__).parent.parent.resolve() / 'custom.css'
+    css_file = Path(__file__).parent.parent.resolve() / 'custom.css'
     with open(css_file, 'r') as f:
         st.markdown(f'''
         <style>
@@ -29,7 +29,7 @@ def inject_custom_css():
         ''', unsafe_allow_html=True)
 
 
-def language_display_name(language_file: pathlib.Path) -> str:
+def language_display_name(language_file: Path) -> str:
     return language_file.stem.capitalize()
 
 

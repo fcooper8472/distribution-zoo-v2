@@ -1,11 +1,15 @@
+import json
+import requests
 import streamlit as st
 import time
+from pathlib import Path
 
 from distribution_zoo import (
     get_random_animal_emoji,
     inject_custom_css,
     get_indices_from_query_params,
-    DistributionClass
+    DistributionClass,
+    TextSubstitutions,
 )
 
 # All distributions should be imported here
@@ -96,3 +100,25 @@ else:
                 )
                 time.sleep(0.05)
                 st.rerun()
+
+    st.subheader('Authors:')
+    st.markdown(TextSubstitutions().apply_to_file(Path('homepage_authors.md')))
+
+    response_1 = requests.get('https://fcooper8472.github.io/distribution-zoo-analytics/data_30.json')
+    response_2 = requests.get('https://fcooper8472.github.io/distribution-zoo-analytics/data_all_time.json')
+
+    if response_1.status_code == 200 and response_2.status_code == 200:
+
+        data_month = json.loads(response_1.text)
+        data_all_time = json.loads(response_2.text)
+
+        substitutions = TextSubstitutions()
+        substitutions.add(r'{{{month_users}}}', str(data_month['user_count']))
+        substitutions.add(r'{{{month_sessions}}}', str(data_month['session_count']))
+        substitutions.add(r'{{{month_countries}}}', str(data_month['country_count']))
+        substitutions.add(r'{{{all_users}}}', str(data_all_time['user_count']))
+        substitutions.add(r'{{{all_sessions}}}', str(data_all_time['session_count']))
+        substitutions.add(r'{{{all_countries}}}', str(data_all_time['country_count']))
+
+        st.subheader('Analytics:')
+        st.markdown(substitutions.apply_to_file(Path('homepage_analytics.md')))
