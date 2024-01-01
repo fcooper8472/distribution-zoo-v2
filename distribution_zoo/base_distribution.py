@@ -22,6 +22,7 @@ class BaseDistribution:
         # Get the file path of the module
         self.file_path = Path(inspect.getfile(module)).resolve()
         self.data_dir = self.file_path.parent / underscore(self.get_class_name())
+        self.class_data_dir = self.data_dir.parent
 
     @classmethod
     def get_class_name(cls):
@@ -87,6 +88,12 @@ class BaseDistribution:
                 lang_tabs = st.tabs(lang_names)
 
                 for lang_tab, code_file in zip(lang_tabs, all_code_files):
+                    class_lang_file = self.class_data_dir / 'code' / code_file.name
+                    if class_lang_file.is_file():
+                        with open(class_lang_file, 'r') as f:
+                            expander = lang_tab.expander('Prerequisites')
+                            expander.markdown(f.read())
+
                     lang_tab.markdown(self.code_substitutions.apply_to_file(code_file))
 
             else:
