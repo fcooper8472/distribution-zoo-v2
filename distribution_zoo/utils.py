@@ -30,6 +30,10 @@ def inject_custom_css():
 
 
 def language_display_name(language_file: Path) -> str:
+
+    if language_file.stem == 'cpp':
+        return 'C++'
+
     return language_file.stem.capitalize()
 
 
