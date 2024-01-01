@@ -22,11 +22,12 @@ def get_random_animal_emoji():
 def inject_custom_css():
     css_file = Path(__file__).parent.parent.resolve() / 'custom.css'
     with open(css_file, 'r') as f:
-        st.markdown(f'''
-        <style>
-        {f.read()}
-        </style>
-        ''', unsafe_allow_html=True)
+        css_container = st.container()
+        css_container.markdown(f'''
+<style>
+{f.read()}
+</style>
+''', unsafe_allow_html=True)
 
 
 def language_display_name(language_file: Path) -> str:

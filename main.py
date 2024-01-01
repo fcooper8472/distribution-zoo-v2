@@ -85,40 +85,43 @@ if selected_dist:
     selected_dist_inst.display()
 else:
 
-    st.title('Explore the Distribution Zoo')
+    with st.container():
+        st.title('Explore the Distribution Zoo')
 
-    cols = st.columns(len(dist_mapping.keys()))
+    with st.container():
+        cols = st.columns(len(dist_mapping.keys()))
 
-    for col, key in zip(cols, dist_mapping.keys()):
-        col.subheader(key.display_name)
+        for col, key in zip(cols, dist_mapping.keys()):
+            col.subheader(key.display_name)
 
-        for dist in dist_mapping[key]:
-            if st.button(dist.display_name):
-                st.experimental_set_query_params(
-                    dist_class=key.short_name,
-                    dist_name=dist.get_class_name(),
-                )
-                time.sleep(0.05)
-                st.rerun()
+            for dist in dist_mapping[key]:
+                if col.button(dist.display_name):
+                    st.experimental_set_query_params(
+                        dist_class=key.short_name,
+                        dist_name=dist.get_class_name(),
+                    )
+                    time.sleep(0.05)
+                    st.rerun()
 
-    st.subheader('Authors:')
-    st.markdown(TextSubstitutions().apply_to_file(Path('homepage_authors.md')))
+    with st.container():
+        st.subheader('Authors:')
+        st.markdown(TextSubstitutions().apply_to_file(Path('homepage_authors.md')))
 
-    response_1 = requests.get('https://fcooper8472.github.io/distribution-zoo-analytics/data_30.json')
-    response_2 = requests.get('https://fcooper8472.github.io/distribution-zoo-analytics/data_all_time.json')
+        response_1 = requests.get('https://fcooper8472.github.io/distribution-zoo-analytics/data_30.json')
+        response_2 = requests.get('https://fcooper8472.github.io/distribution-zoo-analytics/data_all_time.json')
 
-    if response_1.status_code == 200 and response_2.status_code == 200:
+        if response_1.status_code == 200 and response_2.status_code == 200:
 
-        data_month = json.loads(response_1.text)
-        data_all_time = json.loads(response_2.text)
+            data_month = json.loads(response_1.text)
+            data_all_time = json.loads(response_2.text)
 
-        substitutions = TextSubstitutions()
-        substitutions.add(r'{{{month_users}}}', str(data_month['user_count']))
-        substitutions.add(r'{{{month_sessions}}}', str(data_month['session_count']))
-        substitutions.add(r'{{{month_countries}}}', str(data_month['country_count']))
-        substitutions.add(r'{{{all_users}}}', str(data_all_time['user_count']))
-        substitutions.add(r'{{{all_sessions}}}', str(data_all_time['session_count']))
-        substitutions.add(r'{{{all_countries}}}', str(data_all_time['country_count']))
+            substitutions = TextSubstitutions()
+            substitutions.add(r'{{{month_users}}}', str(data_month['user_count']))
+            substitutions.add(r'{{{month_sessions}}}', str(data_month['session_count']))
+            substitutions.add(r'{{{month_countries}}}', str(data_month['country_count']))
+            substitutions.add(r'{{{all_users}}}', str(data_all_time['user_count']))
+            substitutions.add(r'{{{all_sessions}}}', str(data_all_time['session_count']))
+            substitutions.add(r'{{{all_countries}}}', str(data_all_time['country_count']))
 
-        st.subheader('Analytics:')
-        st.markdown(substitutions.apply_to_file(Path('homepage_analytics.md')))
+            st.subheader('Analytics:')
+            st.markdown(substitutions.apply_to_file(Path('homepage_analytics.md')))
