@@ -35,3 +35,11 @@ def test_extract_normal(at_normal):
 
     with open(code_dir / 'rvs.cpp', 'w') as f:
         f.write(f'{pre_code_matches[0]}{main_code_matches[2]}')
+
+
+def test_code_files_exist():
+
+    assert (get_test_output_dir() / 'normal' / 'cpp' / 'pdf.cpp').is_file()
+    assert (get_test_output_dir() / 'normal' / 'cpp' / 'logpdf.cpp').is_file()
+    assert (get_test_output_dir() / 'normal' / 'cpp' / 'rvs.cpp').is_file()
+
