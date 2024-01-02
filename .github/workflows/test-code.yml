@@ -46,4 +46,4 @@ jobs:
         ./rvs > rvs.out
         
         cat rvs.out
-      working-directory: tests/normal/cpp
+      working-directory: tests/test_output/normal/cpp
