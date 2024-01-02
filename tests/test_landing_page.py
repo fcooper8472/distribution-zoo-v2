@@ -1,30 +1,25 @@
 from streamlit.testing.v1 import AppTest
 
-from pathlib import Path
+from utils import app_test
 
 import re
 
-app_file_path = Path(__file__).resolve().parent.parent / 'main.py'
-assert app_file_path.is_file()
 
-
-def test_custom_css():
-    at = AppTest.from_file(script_path=str(app_file_path), default_timeout=100.0).run()
-    css_container = at.main[0]
+def test_custom_css(app_test):
+    css_container = app_test.main[0]
     assert len(css_container) == 1
     assert r'Targeting the tab button with a specific attribute and its inner <p> tag' in css_container.markdown[0].value
 
 
-def test_landing_page():
-    at = AppTest.from_file(script_path=str(app_file_path), default_timeout=100.0).run()
+def test_landing_page(app_test):
 
     # The head container should only contain a title
-    cont_head = at.main[1]
+    cont_head = app_test.main[1]
     assert len(cont_head) == 1
     assert cont_head.title[0].body == 'Explore the Distribution Zoo'
 
     # The body container should contain three cols
-    cont_body = at.main[2]
+    cont_body = app_test.main[2]
     assert len(cont_body) == 1
     assert len(cont_body.columns) == 3
 
@@ -43,7 +38,7 @@ def test_landing_page():
     assert current_col.subheader[0].body == 'Multivariate'
 
     # The footer contains author and analytics
-    cont_foot = at.main[3]
+    cont_foot = app_test.main[3]
 
     author_subheader = cont_foot.subheader[0]
     assert author_subheader.body == 'Authors:'
