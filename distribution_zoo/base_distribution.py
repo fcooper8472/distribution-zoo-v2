@@ -77,7 +77,7 @@ class BaseDistribution:
 
         with code:
 
-            all_code_files = list((self.data_dir / 'code').glob('*'))
+            all_code_files = sorted(list((self.data_dir / 'code').glob('*')))
 
             if len(all_code_files) > 0:
 
