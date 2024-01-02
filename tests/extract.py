@@ -42,4 +42,3 @@ def test_code_files_exist():
     assert (get_test_output_dir() / 'normal' / 'cpp' / 'pdf.cpp').is_file()
     assert (get_test_output_dir() / 'normal' / 'cpp' / 'logpdf.cpp').is_file()
     assert (get_test_output_dir() / 'normal' / 'cpp' / 'rvs.cpp').is_file()
-
