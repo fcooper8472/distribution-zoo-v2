@@ -1,4 +1,4 @@
-from .utils import language_display_name
+from .lang import Lang
 from .text_substitutions import TextSubstitutions
 
 from inflection import underscore
@@ -83,7 +83,7 @@ class BaseDistribution:
 
                 st.info('Code snippets are dynamically updated with the parameters', icon="ℹ️")
 
-                lang_names = [language_display_name(lang) for lang in all_code_files]
+                lang_names = [Lang.convert(lang.stem, 'fence', 'd_name') for lang in all_code_files]
 
                 lang_tabs = st.tabs(lang_names)
 

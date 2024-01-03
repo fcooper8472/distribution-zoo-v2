@@ -30,14 +30,6 @@ def inject_custom_css():
 ''', unsafe_allow_html=True)
 
 
-def language_display_name(language_file: Path) -> str:
-
-    if language_file.stem == 'cpp':
-        return 'C++'
-
-    return language_file.stem.capitalize()
-
-
 def get_indices_from_query_params(dist_mapping: dict):
 
     qp = st.experimental_get_query_params()
