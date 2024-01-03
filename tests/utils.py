@@ -16,12 +16,12 @@ def app_test() -> AppTest:
 def at_normal() -> AppTest:
     at = AppTest.from_file(script_path=str(app_file_path), default_timeout=100.0).run()
     at.sidebar.selectbox(key='dist_class').select('Continuous Univariate').run()
+    at.sidebar.selectbox(key='dist').select('Normal').run()
 
-    at = at.sidebar.selectbox(key='dist').select('Normal').run()
+    assert at.main.header[0].value == 'Normal distribution'
 
     return at
 
 
 def get_test_output_dir():
-    print(Path(__file__).parent / 'test_output')
     return Path(__file__).parent / 'test_output'

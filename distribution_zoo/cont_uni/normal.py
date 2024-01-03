@@ -23,15 +23,15 @@ class Normal(BaseDistribution):
     def sliders(self):
 
         self.param_range_start, self.param_range_end = st.sidebar.slider(
-            'Range', min_value=self.range_min, max_value=self.range_max, value=(-10.0, 10.0), step=0.1
+            'Range', min_value=self.range_min, max_value=self.range_max, value=(-10.0, 10.0), step=0.1, key='normal_range'
         )
 
         self.param_mean = st.sidebar.slider(
-            r'Mean ($\mu$)', min_value=-30.0, max_value=30.0, value=0.0, step=0.1
+            r'Mean ($\mu$)', min_value=-30.0, max_value=30.0, value=0.0, step=0.1, key='normal_mean'
         )
 
         self.param_std = st.sidebar.slider(
-            r'Standard deviation ($\sigma$)', min_value=0.1, max_value=20.0, value=1.0, step=0.1
+            r'Standard deviation ($\sigma$)', min_value=0.1, max_value=20.0, value=1.0, step=0.1, key='normal_std'
         )
 
     def plot(self):

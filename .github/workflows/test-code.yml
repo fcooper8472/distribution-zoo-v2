@@ -27,19 +27,19 @@ jobs:
         python -m pip install poetry
         poetry install
 
-    - name: Test with pytest
+    - name: Run code extraction
       run: |
         poetry run pytest tests/extract.py
 
-    - name: Install C++ deps
+    - name: C++ deps
       run: |
           sudo apt install libboost-math-dev
 
     - name: Compile and run C++ files
       run: |
-        g++ -o my_program pdf.cpp -lboost_math
-        g++ -o my_program logpdf.cpp -lboost_math
-        g++ -o my_program rvs.cpp -lboost_math
+        g++ -o pdf pdf.cpp
+        g++ -o logpdf logpdf.cpp
+        g++ -o rvs rvs.cpp
         
         ./pdf > pdf.out
         ./logpdf > logpdf.out
@@ -47,3 +47,12 @@ jobs:
         
         cat rvs.out
       working-directory: tests/test_output/normal/cpp
+
+    - name: Run Python files
+      run: |
+        python pdf.py
+        python logpdf.py
+        python rvs.py
+        
+        cat rvs.out
+      working-directory: tests/test_output/normal/python
