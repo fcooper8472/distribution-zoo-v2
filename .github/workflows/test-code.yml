@@ -31,9 +31,14 @@ jobs:
       run: |
         poetry run pytest tests/extract.py
 
-    - name: C++ deps
+    - name: Install C++ deps
       run: |
           sudo apt install libboost-math-dev
+
+    - name: Install Python deps
+      run: |
+          pip install --upgrade pip wheel
+          pip install numpy scipy
 
     - name: Compile and run C++ files
       run: |
