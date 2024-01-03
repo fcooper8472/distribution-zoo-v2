@@ -40,6 +40,11 @@ jobs:
           pip install --upgrade pip wheel
           pip install numpy scipy
 
+    - name: Check params
+      run: |
+        cat normal/params.json
+      working-directory: tests/test_output
+
     - name: Compile and run C++ files
       run: |
         g++ -o pdf pdf.cpp
@@ -49,8 +54,6 @@ jobs:
         ./pdf > pdf.out
         ./logpdf > logpdf.out
         ./rvs > rvs.out
-        
-        cat logpdf.out
       working-directory: tests/test_output/normal/cpp
 
     - name: Run Python files
@@ -58,6 +61,8 @@ jobs:
         python pdf.py > pdf.out
         python logpdf.py > logpdf.out
         python rvs.py > rvs.out
-        
-        cat logpdf.out
       working-directory: tests/test_output/normal/python
+
+    - name: Run code validation
+      run: |
+        poetry run pytest tests/validate_code_output.py
