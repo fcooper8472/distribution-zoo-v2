@@ -36,6 +36,7 @@ int main() {
 ```cpp
 #include <boost/math/distributions/normal.hpp>
 
+#include <cmath>
 #include <iostream>
 #include <vector>
 
@@ -55,7 +56,7 @@ int main() {
     boost::math::normal_distribution<> dist(mean, std);
 
     for (int i = 0; i < x.size(); ++i) {
-        logpdf.push_back(boost::math::logpdf(dist, x[i]));
+        logpdf.push_back(std::log(boost::math::pdf(dist, x[i])));
         std::cout << x[i] << ",\t" << logpdf[i] << '\n';
     }
 
