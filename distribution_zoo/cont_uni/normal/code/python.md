@@ -8,7 +8,10 @@ x = np.linspace(start={{{range_start}}}, stop={{{range_end}}}, num=50)
 
 mean = {{{mean}}}
 std = {{{std}}}
-norm.pdf(x=x, loc=mean, scale=std)
+y = norm.pdf(x=x, loc=mean, scale=std)
+
+for x_i, y_i in zip(x, y):
+    print(f'{x_i},{y_i}')
 ```
 
 
@@ -22,7 +25,10 @@ x = np.linspace(start={{{range_start}}}, stop={{{range_end}}}, num=50)
 
 mean = {{{mean}}}
 std = {{{std}}}
-norm.logpdf(x=x, loc=mean, scale=std)
+y = norm.logpdf(x=x, loc=mean, scale=std)
+
+for x_i, y_i in zip(x, y):
+    print(f'{x_i},{y_i}')
 ```
 
 
@@ -34,5 +40,8 @@ from scipy.stats import norm
 n = 50
 mean = {{{mean}}}
 std = {{{std}}}
-norm.rvs(loc=mean, scale=std, size=n)
+rvs = norm.rvs(loc=mean, scale=std, size=n)
+
+for rv in rvs:
+    print(rv)
 ```

@@ -45,14 +45,14 @@ jobs:
         ./logpdf > logpdf.out
         ./rvs > rvs.out
         
-        cat rvs.out
+        cat logpdf.out
       working-directory: tests/test_output/normal/cpp
 
     - name: Run Python files
       run: |
-        python pdf.py
-        python logpdf.py
-        python rvs.py
+        python pdf.py > pdf.out
+        python logpdf.py > logpdf.out
+        python rvs.py > rvs.out
         
-        cat rvs.out
+        cat logpdf.out
       working-directory: tests/test_output/normal/python
