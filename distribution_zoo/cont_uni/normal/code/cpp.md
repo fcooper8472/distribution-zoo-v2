@@ -74,7 +74,7 @@ int main() {
 
 int main() {
 
-    const std::size_t n = 50;
+    const std::size_t n = 100;
     std::vector<double> rvs;
     rvs.reserve(n);
 

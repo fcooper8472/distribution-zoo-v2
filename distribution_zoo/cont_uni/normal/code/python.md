@@ -37,7 +37,7 @@ for x_i, y_i in zip(x, y):
 ```python
 from scipy.stats import norm
 
-n = 50
+n = 100
 mean = {{{mean}}}
 std = {{{std}}}
 rvs = norm.rvs(loc=mean, scale=std, size=n)
