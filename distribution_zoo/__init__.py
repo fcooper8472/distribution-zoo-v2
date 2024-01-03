@@ -14,8 +14,8 @@ from .cont_uni import (
 
 dist_mapping = {
     DistributionClass('Continuous Univariate', 'cont_uni'): [
-        Normal,
-        Gamma,
+        Normal(),
+        Gamma(),
     ],
     DistributionClass('Discrete Univariate', 'disc_uni'): [
     ],

@@ -57,7 +57,6 @@ else:
 selected_dist = st.sidebar.selectbox(
     label='Select a distribution',
     options=available_dists,
-    format_func=lambda _dist: _dist.display_name,
     index=selected_dist_index,
     placeholder='Select a distribution',
     label_visibility='collapsed',
@@ -65,8 +64,8 @@ selected_dist = st.sidebar.selectbox(
 )
 
 if selected_dist:
-    selected_dist_inst = selected_dist()
-    selected_dist_inst.display()
+    selected_dist.display()
+
 else:
 
     with st.container():

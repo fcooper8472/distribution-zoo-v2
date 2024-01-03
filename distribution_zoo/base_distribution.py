@@ -28,6 +28,9 @@ class BaseDistribution:
     def get_class_name(cls):
         return cls.__name__
 
+    def __str__(self):
+        return self.display_name
+
     def display(self):
         self.title()
         st.sidebar.header('Parameters:')
