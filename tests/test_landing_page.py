@@ -13,9 +13,9 @@ def test_custom_css(app_test):
 
 def test_landing_page(app_test):
 
-    # The head container should only contain a title
+    # The head container should contain a title and warning
     cont_head = app_test.main[1]
-    assert len(cont_head) == 1
+    assert len(cont_head) == 2
     assert cont_head.title[0].body == 'Explore the Distribution Zoo'
 
     # The body container should contain three cols
