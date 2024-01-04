@@ -70,6 +70,7 @@ else:
 
     with st.container():
         st.title('Explore the Distribution Zoo')
+        st.warning('This app is under construction. Visit the [existing zoo](https://ben18785.shinyapps.io/distribution-zoo/) instead.', icon="⚠️")
 
     with st.container():
         cols = st.columns(len(dist_mapping.keys()))
