@@ -25,7 +25,7 @@ class Normal(BaseDistribution):
         if 'normal_range' not in st.session_state:
             self.update_range()
 
-        # This slider's initial value is set from st.session_state['normal_mean'], set with update_range()
+        # This slider's initial value is set from st.session_state['normal_range'], set with update_range()
         self.param_range_start, self.param_range_end = st.sidebar.slider(
             'Range', min_value=self.range_min, max_value=self.range_max, step=0.1, key='normal_range'
         )
