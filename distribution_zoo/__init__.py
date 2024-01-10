@@ -12,12 +12,17 @@ from .cont_uni import (
     Gamma,
 )
 
+from .disc_uni import (
+    Poisson,
+)
+
 dist_mapping = {
     DistributionClass('Continuous Univariate', 'cont_uni'): [
         Normal(),
         Gamma(),
     ],
     DistributionClass('Discrete Univariate', 'disc_uni'): [
+        Poisson()
     ],
     DistributionClass('Multivariate', 'mult'): [
     ],

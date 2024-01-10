@@ -29,7 +29,7 @@ This is the repository for a version of the Distribution Zoo, built in Streamlit
 | Binomial                  |       |          |       |      |      |       |             |        |        |   |      |
 | Discrete-Uniform          |       |          |       |      |      |       |             |        |        |   |      |
 | Negative-Binomial         |       |          |       |      |      |       |             |        |        |   |      |
-| Poisson                   |       |          |       |      |      |       |             |        |        |   |      |
+| Poisson                   | :+1:  |          |       |      |      |       |             |        |        |   |      |
 | **Multivariate**          |       |          |       |      |      |       |             |        |        |   |      |
 | Dirichlet                 |       |          |       |      |      |       |             |        |        |   |      |
 | Inverse-Wishart           |       |          |       |      |      |       |             |        |        |   |      |
