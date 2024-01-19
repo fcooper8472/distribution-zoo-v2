@@ -1,4 +1,5 @@
 from pathlib import Path
+import numpy as np
 import random
 import streamlit as st
 
@@ -61,3 +62,47 @@ def get_indices_from_query_params(dist_mapping: dict):
         return class_index, None
 
     return class_index, dist_index
+
+
+@st.cache_data
+def unit_simplex_3d_uniform_cover(depth=3):
+    """
+    Uniformly cover the 3d unit simplex X+Y+Z=1 in a generative way, by repeatedly splitting the triangle into
+    four smaller triangles, and calculating the centre of each. This means that 4^depth samples will be generated.
+
+    This function avoids using random sampling, and creates a geometrically uniform cover. It is used primarily
+    to create the points on which to calculate the 3d Dirichlet distribution PDF.
+
+    Args:
+        depth: Maximum depth of the subdivision.
+
+    Returns:
+        A NumPy array of shape (3, 4^{depth}) containing the simplex points.
+    """
+    # Define the unit simplex vertices
+    simplex_vertices = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+
+    # Initialize with the first level of subdivision
+    triangles = [simplex_vertices]
+
+    for _ in range(depth):
+        new_triangles = []
+        for triangle in triangles:
+            midpoint1 = (triangle[0] + triangle[1]) / 2
+            midpoint2 = (triangle[0] + triangle[2]) / 2
+            midpoint3 = (triangle[1] + triangle[2]) / 2
+
+            new_triangles.extend([
+                [triangle[0], midpoint1, midpoint2],
+                [triangle[1], midpoint1, midpoint3],
+                [triangle[2], midpoint2, midpoint3],
+                [midpoint1, midpoint2, midpoint3]
+            ])
+
+        triangles = new_triangles
+
+    # Compute centroids of final triangles
+    points = np.array([np.mean(triangle, axis=0) for triangle in triangles])
+
+    # Transpose, because the Dirichlet PDF function wants the samples this way around. (This is unusual.)
+    return points.T
